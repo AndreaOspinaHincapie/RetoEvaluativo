@@ -4,6 +4,7 @@
 #include<map>
 using namespace std;
 int MenuPrincipal();
+int MenuAdmin();
 void Administrador();
 void Usuario();
 string LeerArchivo(string nombre);
@@ -45,6 +46,20 @@ int MenuPrincipal(){
     cout<<"--------------------------------------------------------------------------------"<<endl;
     return op;
 }
+int MenuAdmin(){
+    int op=0;
+    cout<<"--------------------------------------------------------------------------------"<<endl;
+    cout<<"Bienvenido, seleccione una de las siguientes opciones:  "<<endl;
+    cout<<"Menú de opciones: "<<endl;
+    cout<<"1. Registrar Usuarios "<<endl;
+    cout<<"2. Ingresar peliculas "<<endl;
+    cout<<"3. Ofertar asientos "<<endl;
+    cout<<"4. Reporte diario de ventas "<<endl;
+    cout<<"Ingrese el numero de la opcion o 0 para salir"<<endl;
+    cin>>op;
+    cout<<"--------------------------------------------------------------------------------"<<endl;
+    return op;
+}
 void Administrador(){
      map<string,string>Usuarios;
      string passwordIng="",password="";
@@ -53,7 +68,28 @@ void Administrador(){
      getline(cin,passwordIng);
      password=LeerArchivo("sudo");
      if(password==passwordIng+'\n'){
-         //MenuAdmin
+         int option=0;
+         option=MenuPrincipal();
+         while(option!=0){
+             switch (option) {
+             case 1:
+                 //Registrar Usuarios
+                 break;
+             case 2:
+                 //Ingresar peliculas
+                 break;
+             case 3:
+                 //Ofertar asientos
+                 break;
+             case 4:
+                 //Reporte diario de ventas
+                 break;
+             default:
+                 cout<<"Opcion no disponible, ingrese otro numero"<<endl;
+                 break;
+             }
+             option=MenuPrincipal();
+         }
      }
      else
        cout<<"Contrasena equivocada."<<endl;
