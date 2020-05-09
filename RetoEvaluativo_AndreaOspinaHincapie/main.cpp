@@ -69,7 +69,7 @@ void Administrador(){
      password=LeerArchivo("sudo");
      if(password==passwordIng+'\n'){
          int option=0;
-         option=MenuPrincipal();
+         option=MenuAdmin();
          while(option!=0){
              switch (option) {
              case 1:
@@ -88,7 +88,7 @@ void Administrador(){
                  cout<<"Opcion no disponible, ingrese otro numero"<<endl;
                  break;
              }
-             option=MenuPrincipal();
+             option=MenuAdmin();
          }
      }
      else
