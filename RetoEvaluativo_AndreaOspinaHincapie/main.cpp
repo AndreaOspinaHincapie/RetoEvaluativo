@@ -19,6 +19,7 @@ void ObtenerDatosPeliculas(list<Pelicula>&Peliculas);
 void GuardarPeliculas(list<Pelicula>Peliculas);
 void IngresarPeliculas();
 bool IsInMovieDatabase(list<Pelicula>PeliculasCine, string ID, unsigned sala);
+bool IsNumeric(string a);
 int main()
 {
     int option=0;
@@ -175,7 +176,7 @@ void EscribirEnArchivo(string escribir, string nombre){
             throw '1';
         }
         //Escribiendo en el archivo:
-        Write<<escribir+'\n';
+        Write<<escribir;
         //Cerrando el archivo:
         Write.close();
         cout<<"Se ha escrito correctamente en el archivo "<<nombre+".txt"<<endl;
@@ -298,7 +299,7 @@ void GuardarPeliculas(list<Pelicula>Peliculas){
     list<Pelicula>::iterator it;
     string Guardar="";
     for(it=Peliculas.begin();it!=Peliculas.end();it++){
-        Guardar=Guardar+(*it).getID()+","+(*it).getNombre()+","+(*it).getGenero()+","+to_string((*it).getDuracionMin())+to_string((*it).getSala())+(*it).getHora()+to_string((*it).getAsientosDisponibles())+to_string((*it).getCapacidadMax())+(*it).getClasificacion()+'\n';
+        Guardar=Guardar+(*it).getID()+","+(*it).getNombre()+","+(*it).getGenero()+","+to_string((*it).getDuracionMin())+","+to_string((*it).getSala())+","+(*it).getHora()+","+to_string((*it).getAsientosDisponibles())+","+to_string((*it).getCapacidadMax())+","+(*it).getClasificacion()+'\n';
     }
     EscribirEnArchivo(Guardar,"Peliculas");
 };
@@ -312,6 +313,7 @@ void IngresarPeliculas(){
     cin>>cantidad;
     cin.ignore();
     for(int i=0;i<cantidad;i++){
+        cont=0;
         do{
             if(cont>0)cout<<endl<<"La sala/ID ya se encuentran ocupados "<<endl;
             cout<<i+1<<".Ingrese el ID de la pelicula (no debe contener comas): ";
@@ -331,24 +333,41 @@ void IngresarPeliculas(){
             getline(cin,genero);
             cout<<endl<<i+1<<".Ingrese la clasificacion: ";
             getline(cin,clasificacion);
+            cont++;
         }while(nombre.find(",")!=string::npos||genero.find(",")!=string::npos||clasificacion.find(",")!=string::npos);
         cont=0;
         int hora_=0, min=0;
-        string horaMin="";
+        string horaMin="", horaA="", minA="";
         unsigned long posM=0, div=0;
+        bool band=true;
         do{
             if(cont>0) cout<<endl<<"Hora invalida"<<endl;
             cout<<endl<<i+1<<".Ingrese la hora: ";
             getline(cin,hora);
             posM=hora.find("m");
-            horaMin=hora.substr(0,posM-1);
-            div=horaMin.find(":");
-            if(div!=string::npos){
-               hora_=stoi(horaMin.substr(0,div));
-               min=stoi(horaMin.substr(div+1));
+            if(posM!=string::npos){
+                div=hora.find(":");
+                if(div!=string::npos){
+                   horaA=hora.substr(0,div);
+                   minA=hora.substr(div+1,posM-div-2);
+                   if(IsNumeric(horaA)&& IsNumeric(minA)){
+                       hora_=stoi(horaA);
+                       min=stoi(minA);
+                       band=false;
+                   }
+
+                }
+                else{
+                    horaMin=hora.substr(0,posM-1);
+                    if(IsNumeric(horaMin)){
+                        hora_=stoi(horaMin);
+                        band=false;
+                    }
+                }
             }
-            //Revisar horas validas
-        }while(hora.find(",")!=string::npos ||hora.find("m")==string::npos||hora.find("m")!=hora.length()-1|| hora.find("m")-1!='a'|| hora.find("m")-1!='p'|| (div==string::npos && hora.length()!=3));
+            cont++;
+         }while(band==true || hora_>12 || min>59);
+
        cout<<endl<<"Ingrese la duracion en minutos: ";
        cin>>duracion;
        cont=0;
@@ -358,10 +377,12 @@ void IngresarPeliculas(){
        cin>>capacidad;
        cout<<endl<<"Ingrese los asientos disponibles: ";
        cin>>asientosDisp;
+       cin.ignore();
        cont++;
        }while(asientosDisp>capacidad);
        Pelicula Ing(ID,nombre,genero,duracion,sala,hora,asientosDisp,capacidad,clasificacion);
        PeliculasCine.push_back(Ing);
+
     }
     GuardarPeliculas(PeliculasCine);
 }
@@ -373,4 +394,12 @@ bool IsInMovieDatabase(list<Pelicula>PeliculasCine, string ID, unsigned sala){
     }
     return false;
 
+}
+bool IsNumeric(string a){
+    string::iterator it;
+    for(it=a.begin();it!=a.end();it++){
+        if((*it)>57 || (*it)<48)
+            return false;
+    }
+    return true;
 }
