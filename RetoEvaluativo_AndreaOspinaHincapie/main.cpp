@@ -12,6 +12,7 @@ void EscribirEnArchivo(string escribir, string nombre);
 void ObtenerUsuarios(string archivoLeido, map<string,string>& Usuarios);
 bool Is_Registered(string nombre, string password,map<string,string>Usuarios);
 void GuardarUsuarios(map<string,string>Usuarios);
+void RegistrarUsuarios();
 int main()
 {
     int option=0;
@@ -73,7 +74,7 @@ void Administrador(){
          while(option!=0){
              switch (option) {
              case 1:
-                 //Registrar Usuarios
+                 RegistrarUsuarios();
                  break;
              case 2:
                  //Ingresar peliculas
@@ -216,4 +217,34 @@ void GuardarUsuarios(map<string,string>Usuarios){
     }
     EscribirEnArchivo(escribir,"Usuarios");
 }
-//Asegurarse que usuarios registrados por admin no tengan : en el nombre.
+void RegistrarUsuarios(){
+    int numUsers=0,cont=0;
+    string archivo=LeerArchivo("Usuarios");
+    string nombre="", password="";
+    map<string,string>Usuarios;
+    ObtenerUsuarios(archivo,Usuarios);
+    cout<<"Ingrese el numero de usuarios a registrar: "<<endl;
+    cin>>numUsers;
+    cin.ignore();
+    for(int i=0;i<numUsers;i++){
+        cont=0;
+        do{
+
+          if(cont>0) cout<<endl<<"Nombre de usuario invalido."<<endl;
+          cout<<i+1<<".Ingrese el nombre de usuario (no debe contener dos puntos o comas): ";
+          getline(cin,nombre);
+          cont++;
+
+        }while(Usuarios.count(nombre)==1 || nombre.find(":")!=string::npos || nombre.find(",")!=string::npos);
+        cont=0;
+        do{
+        if(cont>0)cout<<"Contrasena invalida. no puede contener comas"<<endl;
+        cout<<endl<<i+1<<".Ingrese la contrasena del usuario (no debe contener comas): ";
+        getline(cin,password);
+        cont++;
+        }while(password.find(",")!=string::npos);
+        Usuarios.emplace(nombre,password);
+
+    }
+    GuardarUsuarios(Usuarios);
+}
