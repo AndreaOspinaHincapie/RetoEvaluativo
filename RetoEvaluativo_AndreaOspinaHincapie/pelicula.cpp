@@ -30,22 +30,22 @@ void Pelicula::setGenero(const string &value)
     genero = value;
 }
 
-string Pelicula::getDuracionMin() const
+unsigned int Pelicula::getDuracionMin() const
 {
     return duracionMin;
 }
 
-void Pelicula::setDuracionMin(const string &value)
+void Pelicula::setDuracionMin(unsigned int value)
 {
     duracionMin = value;
 }
 
-int Pelicula::getSala() const
+unsigned int Pelicula::getSala() const
 {
     return sala;
 }
 
-void Pelicula::setSala(int value)
+void Pelicula::setSala(unsigned int value)
 {
     sala = value;
 }
@@ -70,37 +70,42 @@ void Pelicula::setClasificacion(const string &value)
     clasificacion = value;
 }
 
-int Pelicula::getCapacidadMax() const
+unsigned int Pelicula::getCapacidadMax() const
 {
     return capacidadMax;
 }
 
-void Pelicula::setCapacidadMax(int value)
+void Pelicula::setCapacidadMax(unsigned int value)
 {
     capacidadMax = value;
 }
 
-int Pelicula::getAsientosDisponibles() const
+unsigned int Pelicula::getAsientosDisponibles() const
 {
     return asientosDisponibles;
 }
 
-void Pelicula::setAsientosDisponibles(int value)
+void Pelicula::setAsientosDisponibles(unsigned int value)
 {
     asientosDisponibles = value;
-}
-
-map<string, vector<int> > Pelicula::getAsientos() const
-{
-    return Asientos;
-}
-
-void Pelicula::setAsientos(const map<string, vector<int> > &value)
-{
-    Asientos = value;
 }
 
 Pelicula::Pelicula()
 {
 
 }
+
+Pelicula::Pelicula(string _ID, string _nombre, string _genero, unsigned _duracion, unsigned _sala, string _hora, unsigned _asientos, unsigned _capMax, string _clasificacion)
+{
+    ID=_ID;
+    nombre=_nombre;
+    genero=_genero;
+    duracionMin=_duracion;
+    sala=_sala;
+    Hora=_hora;
+    asientosDisponibles=_asientos;
+    capacidadMax=_capMax;
+    clasificacion=_clasificacion;
+
+}
+

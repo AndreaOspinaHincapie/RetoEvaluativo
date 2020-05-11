@@ -2,6 +2,8 @@
 #include<fstream>
 #include<string>
 #include<map>
+#include<list>
+#include"pelicula.h"
 using namespace std;
 int MenuPrincipal();
 int MenuAdmin();
@@ -13,6 +15,10 @@ void ObtenerUsuarios(string archivoLeido, map<string,string>& Usuarios);
 bool Is_Registered(string nombre, string password,map<string,string>Usuarios);
 void GuardarUsuarios(map<string,string>Usuarios);
 void RegistrarUsuarios();
+void ObtenerDatosPeliculas(list<Pelicula>&Peliculas);
+void GuardarPeliculas(list<Pelicula>Peliculas);
+void IngresarPeliculas();
+bool IsInMovieDatabase(list<Pelicula>PeliculasCine, string ID, unsigned sala);
 int main()
 {
     int option=0;
@@ -77,7 +83,7 @@ void Administrador(){
                  RegistrarUsuarios();
                  break;
              case 2:
-                 //Ingresar peliculas
+                 IngresarPeliculas();
                  break;
              case 3:
                  //Ofertar asientos
@@ -247,4 +253,124 @@ void RegistrarUsuarios(){
 
     }
     GuardarUsuarios(Usuarios);
+}
+//------------------------------------------Manejo base de datos de peliculas-----------------------------------
+void ObtenerDatosPeliculas(list<Pelicula>&Peliculas){
+    string Datos="";
+    Datos=LeerArchivo("Peliculas");
+    unsigned long posSalto=0, posComa=0, posComaAnt=0, inicial=0;
+    posSalto=Datos.find('\n');
+    while(posSalto!=string::npos){
+        Pelicula PIngresar;
+        posComa=Datos.find(",",inicial);
+        PIngresar.setID(Datos.substr(inicial,posComa-inicial));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setNombre(Datos.substr(posComaAnt,posComa-posComaAnt));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setGenero(Datos.substr(posComaAnt,posComa-posComaAnt));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setDuracionMin(unsigned(stoi(Datos.substr(posComaAnt,posComa-posComaAnt))));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setSala(unsigned(stoi(Datos.substr(posComaAnt,posComa-posComaAnt))));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setHora(Datos.substr(posComaAnt,posComa-posComaAnt));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setAsientosDisponibles(unsigned(stoi(Datos.substr(posComaAnt,posComa-posComaAnt))));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setCapacidadMax(unsigned(stoi(Datos.substr(posComaAnt,posComa-posComaAnt))));
+        posComaAnt=posComa+1;
+        posComa=Datos.find(",",posComaAnt);
+        PIngresar.setClasificacion(Datos.substr(posComaAnt,posSalto-posComaAnt));
+        Peliculas.push_back(PIngresar);
+        inicial=posSalto+1;
+         posSalto=Datos.find('\n',inicial);
+    }
+
+}
+void GuardarPeliculas(list<Pelicula>Peliculas){
+    list<Pelicula>::iterator it;
+    string Guardar="";
+    for(it=Peliculas.begin();it!=Peliculas.end();it++){
+        Guardar=Guardar+(*it).getID()+","+(*it).getNombre()+","+(*it).getGenero()+","+to_string((*it).getDuracionMin())+to_string((*it).getSala())+(*it).getHora()+to_string((*it).getAsientosDisponibles())+to_string((*it).getCapacidadMax())+(*it).getClasificacion()+'\n';
+    }
+    EscribirEnArchivo(Guardar,"Peliculas");
+};
+void IngresarPeliculas(){
+    list<Pelicula>PeliculasCine;
+    string ID="", nombre="", genero="", hora="", clasificacion="";
+    unsigned duracion=0,sala=0,asientosDisp=0,capacidad=0,cont=0;
+    ObtenerDatosPeliculas(PeliculasCine);
+    int cantidad=0;
+    cout<<"Cantidad de peliculas a ingresar: "<<endl;
+    cin>>cantidad;
+    cin.ignore();
+    for(int i=0;i<cantidad;i++){
+        do{
+            if(cont>0)cout<<endl<<"La sala/ID ya se encuentran ocupados "<<endl;
+            cout<<i+1<<".Ingrese el ID de la pelicula (no debe contener comas): ";
+            getline(cin,ID);
+            cout<<endl<<i+1<<".Ingrese la sala de la pelicula: ";
+            cin>>sala;
+            cin.ignore();
+            cont++;
+          }
+        while(IsInMovieDatabase(PeliculasCine,ID,sala)|| ID.find(",")!=string::npos);
+        cont=0;
+        do{
+            if(cont>0) cout<<endl<<"Datos invalidos, no pueden contener comas"<<endl;
+            cout<<endl<<i+1<<".Ingrese el nombre: ";
+            getline(cin,nombre);
+            cout<<endl<<i+1<<".Ingrese el genero: ";
+            getline(cin,genero);
+            cout<<endl<<i+1<<".Ingrese la clasificacion: ";
+            getline(cin,clasificacion);
+        }while(nombre.find(",")!=string::npos||genero.find(",")!=string::npos||clasificacion.find(",")!=string::npos);
+        cont=0;
+        int hora_=0, min=0;
+        string horaMin="";
+        unsigned long posM=0, div=0;
+        do{
+            if(cont>0) cout<<endl<<"Hora invalida"<<endl;
+            cout<<endl<<i+1<<".Ingrese la hora: ";
+            getline(cin,hora);
+            posM=hora.find("m");
+            horaMin=hora.substr(0,posM-1);
+            div=horaMin.find(":");
+            if(div!=string::npos){
+               hora_=stoi(horaMin.substr(0,div));
+               min=stoi(horaMin.substr(div+1));
+            }
+            //Revisar horas validas
+        }while(hora.find(",")!=string::npos ||hora.find("m")==string::npos||hora.find("m")!=hora.length()-1|| hora.find("m")-1!='a'|| hora.find("m")-1!='p'|| (div==string::npos && hora.length()!=3));
+       cout<<endl<<"Ingrese la duracion en minutos: ";
+       cin>>duracion;
+       cont=0;
+       do{
+       if(cont>0) cout<<"Cantidad de asientos disponibles es mayor a capacidad maxima"<<endl;
+       cout<<endl<<"Ingrese la capacidad maxima: ";
+       cin>>capacidad;
+       cout<<endl<<"Ingrese los asientos disponibles: ";
+       cin>>asientosDisp;
+       cont++;
+       }while(asientosDisp>capacidad);
+       Pelicula Ing(ID,nombre,genero,duracion,sala,hora,asientosDisp,capacidad,clasificacion);
+       PeliculasCine.push_back(Ing);
+    }
+    GuardarPeliculas(PeliculasCine);
+}
+bool IsInMovieDatabase(list<Pelicula>PeliculasCine, string ID, unsigned sala){
+    list<Pelicula>::iterator it;
+    for(it=PeliculasCine.begin();it!=PeliculasCine.end();it++){
+        if((*it).getID()==ID || (*it).getSala()==sala)
+            return true;
+    }
+    return false;
+
 }
