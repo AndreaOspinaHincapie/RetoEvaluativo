@@ -306,7 +306,7 @@ void GuardarPeliculas(list<Pelicula>Peliculas){
 void IngresarPeliculas(){
     list<Pelicula>PeliculasCine;
     string ID="", nombre="", genero="", hora="", clasificacion="";
-    unsigned duracion=0,sala=0,asientosDisp=0,capacidad=0,cont=0;
+    unsigned duracion=0,sala=0,capacidad=0,cont=0;
     ObtenerDatosPeliculas(PeliculasCine);
     int cantidad=0;
     cout<<"Cantidad de peliculas a ingresar: "<<endl;
@@ -372,15 +372,13 @@ void IngresarPeliculas(){
        cin>>duracion;
        cont=0;
        do{
-       if(cont>0) cout<<"Cantidad de asientos disponibles es mayor a capacidad maxima"<<endl;
-       cout<<endl<<"Ingrese la capacidad maxima: ";
+       if(cont>0) cout<<"Capacidad maxima superior a 520 asientos"<<endl;
+       cout<<endl<<"Ingrese la capacidad maxima(520 asientos maximo): ";
        cin>>capacidad;
-       cout<<endl<<"Ingrese los asientos disponibles: ";
-       cin>>asientosDisp;
        cin.ignore();
        cont++;
-       }while(asientosDisp>capacidad);
-       Pelicula Ing(ID,nombre,genero,duracion,sala,hora,asientosDisp,capacidad,clasificacion);
+       }while(capacidad>520);
+       Pelicula Ing(ID,nombre,genero,duracion,sala,hora,capacidad,clasificacion);
        PeliculasCine.push_back(Ing);
 
     }

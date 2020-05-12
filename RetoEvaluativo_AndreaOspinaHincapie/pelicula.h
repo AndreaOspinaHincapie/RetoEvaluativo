@@ -13,20 +13,22 @@ private:
     string genero="";
     unsigned int duracionMin=0;
     unsigned int sala=0;
+    int Filas=0;
     string Hora="";
     string clasificacion="";
     unsigned int capacidadMax=0;
     unsigned int asientosDisponibles=0;
     map<string,vector<int>> Asientos;
-    void setAsientos(const map<string, vector<int> > &value);
-
-
-
+    void setAsientosInicial();
+    vector<string>Preferencial;
+    vector<string>general;
+    vector<string>vibroSound;
+    void TiposAsientosInicial();
+    void ComprarAsiento(string fila, int numero);
 
 public:
     Pelicula();  
-    Pelicula(string _ID,string _nombre, string _genero,unsigned _duracion,unsigned _sala, string _hora, unsigned _asientos, unsigned _capMax, string _clasificacion);
-    map<string, vector<int> > getAsientos() const;
+    Pelicula(string _ID,string _nombre, string _genero,unsigned _duracion,unsigned _sala, string _hora, unsigned _capMax, string _clasificacion);
     string getID() const;
     void setID(const string &value);
     string getNombre() const;
@@ -45,6 +47,8 @@ public:
     void setCapacidadMax(unsigned int value);
     unsigned int getAsientosDisponibles() const;
     void setAsientosDisponibles(unsigned int value);
+    void setAsientos(const map<string, vector<int> > &value);
+    map<string, vector<int> > getAsientos() const;
 };
 
 #endif // PELICULA_H
