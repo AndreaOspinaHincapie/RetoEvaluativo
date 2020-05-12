@@ -132,6 +132,61 @@ void Pelicula::setAsientosInicial()
 
 }
 
+vector<string> Pelicula::getVibroSound() const
+{
+    return vibroSound;
+}
+
+bool Pelicula::Is_Available(string fila,int asiento)
+{
+    if(Asientos.at(fila).at(unsigned(asiento))==0) return false;
+    else return true;
+}
+
+bool Pelicula::IsInGeneral(string fila)
+{
+    for(unsigned i=0;i<general.size();i++){
+        if(fila==general.at(i)) return true;
+    }
+    return false;
+}
+
+bool Pelicula::IsInPreferencial(string fila)
+{
+    for(unsigned i=0;i<Preferencial.size();i++){
+        if(fila==Preferencial.at(i)) return true;
+    }
+    return false;
+}
+
+bool Pelicula::IsInVibro(string fila)
+{
+    for(unsigned i=0;i<vibroSound.size();i++){
+        if(fila==vibroSound.at(i)) return true;
+    }
+    return false;
+}
+
+vector<string> Pelicula::getGeneral() const
+{
+    return general;
+}
+
+void Pelicula::setGeneral(const vector<string> &value)
+{
+    general = value;
+}
+
+vector<string> Pelicula::getPreferencial() const
+{
+    return Preferencial;
+}
+
+void Pelicula::setPreferencial(const vector<string> &value)
+{
+    Preferencial = value;
+}
+
 void Pelicula::TiposAsientosInicial()
 {
     int filasGeneral=Filas/3, filasPreferencial=Filas/3;

@@ -49,6 +49,16 @@ public:
     void setAsientosDisponibles(unsigned int value);
     void setAsientos(const map<string, vector<int> > &value);
     map<string, vector<int> > getAsientos() const;
+    vector<string> getPreferencial() const;
+    void setPreferencial(const vector<string> &value);
+    vector<string> getGeneral() const;
+    void setGeneral(const vector<string> &value);
+    vector<string> getVibroSound() const;
+    bool Is_Available(string fila,int asiento);
+    bool IsInGeneral(string fila);
+    bool IsInPreferencial(string fila);
+    bool IsInVibro(string fila);
+
 };
 
 #endif // PELICULA_H
