@@ -9,4 +9,10 @@ SOURCES += main.cpp \
 DISTFILES +=
 
 HEADERS += \
-    pelicula.h
+    pelicula.h \
+    manejoarchivos.h \
+    administrarusuarios.h \
+    manejopeliculas.h \
+    ventaasientos.h \
+    reporteventas.h \
+    pago.h

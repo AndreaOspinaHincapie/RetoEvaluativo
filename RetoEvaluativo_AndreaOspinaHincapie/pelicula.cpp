@@ -94,6 +94,11 @@ void Pelicula::setAsientos(const map<string, vector<int> > &value)
     Asientos = value;
 }
 
+map<string, vector<int> > Pelicula::getAsientos() const
+{
+    return Asientos;
+}
+
 void Pelicula::setAsientosInicial()
 {
     string nombreF="";
@@ -103,7 +108,7 @@ void Pelicula::setAsientosInicial()
             vector<int>AsientosFila;
             nombreF=char(65+i);
             for(int j=1;j<=20;j++){
-                AsientosFila.at(unsigned(j))=j;
+                AsientosFila.push_back(j);
             }
             Asientos.emplace(nombreF,AsientosFila);
         }
@@ -116,14 +121,15 @@ void Pelicula::setAsientosInicial()
             nombreF=char(65+i);
             if(i<Filas-1){
             for(int j=1;j<=20;j++){
-                AsientosFila.at(unsigned(j))=j;
+                AsientosFila.push_back(j);
             }
             Asientos.emplace(nombreF,AsientosFila);
         }
         else{
                 for(int i=1;i<=ultimaF;i++){
-                 AsientosFila.at(unsigned(i))=i;
+                 AsientosFila.push_back(i);
                 }
+                Asientos.emplace(nombreF,AsientosFila);
             }
 
         }
@@ -189,12 +195,12 @@ void Pelicula::setPreferencial(const vector<string> &value)
 
 void Pelicula::TiposAsientosInicial()
 {
-    int filasGeneral=Filas/3, filasPreferencial=Filas/3;
+    int filasGeneral=(Filas/3)+(Filas%3), filasPreferencial=(Filas/3)+filasGeneral;
     string fila="";
     for(int i=0;i<Filas;i++){
         fila=char(65+i);
         if(i<filasGeneral) general.push_back(fila);
-        else if(i>filasGeneral && i<filasPreferencial*2) Preferencial.push_back(fila);
+        else if(i>=filasGeneral && i<filasPreferencial) Preferencial.push_back(fila);
         else vibroSound.push_back(fila);
     }
 }
@@ -221,5 +227,6 @@ Pelicula::Pelicula(string _ID, string _nombre, string _genero, unsigned _duracio
     asientosDisponibles=_capMax;
     clasificacion=_clasificacion;
     setAsientosInicial();
+    TiposAsientosInicial();
 }
 
