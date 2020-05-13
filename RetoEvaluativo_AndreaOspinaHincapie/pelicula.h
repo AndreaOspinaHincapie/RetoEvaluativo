@@ -24,7 +24,7 @@ private:
     vector<string>general;
     vector<string>vibroSound;
     void TiposAsientosInicial();
-    void ComprarAsiento(string fila, int numero);
+
 
 public:
     Pelicula();  
@@ -58,6 +58,7 @@ public:
     bool IsInGeneral(string fila);
     bool IsInPreferencial(string fila);
     bool IsInVibro(string fila);
+    void ComprarAsiento(string fila, int numero);
 
 };
 

@@ -3,6 +3,68 @@
 #include"manejoarchivos.h"
 #include<list>
 #include"pelicula.h"
+/*void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
+    string datos=LeerArchivo("AsientosDisponibles");
+    string filaNombre="";
+    vector<int>fila;
+    map<string,vector<int>>Sala;
+    string ID="";
+    unsigned long posPuntos=0, posSalto=0, posLin1=0, posLin2=0,inicial=0;
+    posSalto=datos.find('\n');
+    while(posSalto!=string::npos){
+        posPuntos=datos.find(":",inicial);
+        ID=datos.substr(inicial,posPuntos-inicial);
+        posLin1=datos.find("|",posLin2);
+        filaNombre=datos.substr(posPuntos,posLin1-posPuntos);
+        posLin2=datos.find("|",posLin1);
+        while(posLin1<posSalto){
+            for(unsigned long i=posLin1+1;i<posLin2;i++){
+                if(datos.at(i)!=',') fila.push_back(datos.at(i)-'0');
+
+            }
+            Sala.emplace(filaNombre,fila);
+            fila.clear();
+            posLin1=datos.find("|",posLin2);
+            filaNombre=datos.substr(posPuntos,posLin1-posPuntos);
+            posLin2=datos.find("|",posLin1);
+        }
+        DatosAsientos.emplace(ID,fila);
+    }
+
+}*/
+/*void ObtenerTiposAsientos(map<string,map<string,vector<string>>>& DatosTiposAsientos){
+    string datos=LeerArchivo("TiposAsientos");
+    vector<int>General;
+    vector<int>Preferencial;
+    vector<int>Vibro;
+    map<string,vector<string>>Tipos;
+    string ID="";
+    unsigned long posSalto=0, inicial=0, posPuntos=0, posGen=0, posPref=0;
+    unsigned long posVibro=0;
+    posSalto=datos.find('\n');
+    while(posSalto!=string::npos){
+        posPuntos=datos.find(":",inicial);
+        ID=datos.substr(inicial,posPuntos-inicial);
+        posGen=datos.find(";",inicial);
+        posPref=datos.find(";",posGen+1);
+        posVibro=datos.find(";",posPref+1);
+        for(unsigned long i=posPuntos+1;i<posGen;i++){
+            if(datos.at(i)!=',') General.push_back(datos.at(i));
+        }
+        for(unsigned long i=posGen+1;i<posPref;i++){
+            if(datos.at(i)!=',') Preferencial.push_back(datos.at(i));
+        }
+        for(unsigned long i=posPref+1;i<posVibro;i++){
+            if(datos.at(i)!=',') Vibro.push_back(datos.at(i));
+        }
+        Tipos.emplace("Gen",General);
+        Tipos.emplace("Pref",Preferencial);
+        Tipos.emplace("Vibro",Vibro);
+        DatosTiposAsientos.emplace(ID,Tipos);
+        inicial=posSalto+1;
+        posSalto=datos.find('\n',inicial);
+    }
+}*/
 void ObtenerDatosPeliculas(list<Pelicula>&Peliculas){
     string Datos="";
     Datos=LeerArchivo("Peliculas");
@@ -53,7 +115,7 @@ void GuardarPeliculas(list<Pelicula>Peliculas){
 bool IsInMovieDatabase(list<Pelicula>PeliculasCine, string ID, unsigned sala){
     list<Pelicula>::iterator it;
     for(it=PeliculasCine.begin();it!=PeliculasCine.end();it++){
-        if((*it).getID()==ID || (*it).getSala()==sala)
+        if((*it).getID()==ID && (*it).getSala()==sala)
             return true;
     }
     return false;
@@ -69,44 +131,50 @@ bool IsNumeric(string a){
 }
 void GuardarAsientos(list<Pelicula>Peliculas){
     list<Pelicula>::iterator it;
+    map<string,vector<int>>::iterator it2;
     string guardar="";
     for(it=Peliculas.begin();it!=Peliculas.end();it++){
-        map<string, vector<int>>::iterator it2;
-        vector<int>::iterator it3;
         guardar=guardar+(*it).getID()+":";
-        for(it2=(*it).getAsientos().begin();it2!=(*it).getAsientos().end();it2++){
-            guardar=guardar+(*it2).first+",";
-            for(it3=(*it2).second.begin();it3!=(*it2).second.end();it3++){
-                guardar=guardar+to_string((*it3))+",";
-              }
-            guardar=guardar+";";
+        map<string,vector<int>>Asientos;
+        Asientos=(*it).getAsientos();
+        for(it2=Asientos.begin();it2!=Asientos.end();it2++){
+            guardar=guardar+(*it2).first+"|";
+            vector<int>aPfila;
+            aPfila=(*it2).second;
+            unsigned long size=aPfila.size();
+            for(unsigned long i=0;i<size;i++){
+                if(i!=size-1) guardar=guardar+to_string(aPfila.at(i))+",";
+                else guardar=guardar+to_string(aPfila.at(i))+"|:";
+            }
         }
         guardar=guardar+'\n';
 
     }
     EscribirEnArchivo(guardar,"AsientosDisponibles");
-};
+}
 void GuardarTiposAsientos(list<Pelicula>Peliculas){
     list<Pelicula>::iterator it;
-    vector<string>::iterator it2;
     string guardar="";
     for(it=Peliculas.begin();it!=Peliculas.end();it++){
         guardar=guardar+(*it).getID()+":";
-        for(it2=(*it).getGeneral().begin();it2!=(*it).getGeneral().end();it2++){
-            guardar=guardar+(*it2)+",";
+        unsigned long sizeGen=(*it).getGeneral().size(), sizePref=(*it).getPreferencial().size(), sizeVibro=(*it).getVibroSound().size();
+        for(unsigned i=0;i<sizeGen;i++){
+            if(i!=sizeGen-1) guardar=guardar+(*it).getGeneral().at(i)+",";
+            else guardar=guardar+(*it).getGeneral().at(i)+";";
         }
-        guardar=guardar+";";
-        for(it2=(*it).getPreferencial().begin();it2!=(*it).getPreferencial().end();it2++){
-            guardar=guardar+(*it2)+",";
+        for(unsigned i=0;i<sizePref;i++){
+            if(i!=sizePref-1) guardar=guardar+(*it).getPreferencial().at(i)+",";
+            else guardar=guardar+(*it).getPreferencial().at(i)+";";
         }
-        guardar=guardar+";";
-        for(it2=(*it).getVibroSound().begin();it2!=(*it).getVibroSound().end();it2++){
-            guardar=guardar+(*it2)+",";
+        for(unsigned i=0;i<sizeVibro;i++){
+            if(i!=sizeVibro-1) guardar=guardar+(*it).getVibroSound().at(i)+",";
+            else guardar=guardar+(*it).getVibroSound().at(i)+";";
         }
         guardar=guardar+'\n';
     }
     EscribirEnArchivo(guardar,"TiposAsientos");
 }
+
 void IngresarPeliculas(){
     list<Pelicula>PeliculasCine;
     string ID="", nombre="", genero="", hora="", clasificacion="";
@@ -187,6 +255,8 @@ void IngresarPeliculas(){
 
     }
     GuardarPeliculas(PeliculasCine);
+    GuardarAsientos(PeliculasCine);
+    GuardarTiposAsientos(PeliculasCine);
 }
 
 

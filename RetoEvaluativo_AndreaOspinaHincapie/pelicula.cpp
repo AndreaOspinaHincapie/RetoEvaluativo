@@ -207,7 +207,7 @@ void Pelicula::TiposAsientosInicial()
 
 void Pelicula::ComprarAsiento(string fila, int numero)
 {
-    Asientos[fila].at(unsigned(numero))=0;
+    Asientos[fila].at(unsigned(numero-1))=0;
     asientosDisponibles--;
 }
 Pelicula::Pelicula()

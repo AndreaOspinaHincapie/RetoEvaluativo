@@ -77,7 +77,7 @@ void Administrador(){
                  IngresarPeliculas();
                  break;
              case 3:
-                 //Ofertar asientos
+                 ComprarAsiento();
                  break;
              case 4:
                  //Reporte diario de ventas
@@ -107,13 +107,11 @@ void Usuario(){
     cout<<endl<<"Contrasena:";
     getline(cin,password);
     if(Is_Registered(user,password,Usuarios)){
-        //Menu User.
+        ComprarAsiento();
     }
     else{
         cout<<endl<<"Nombre de usuario o contrasena incorrectos."<<endl;
     }
-    //Guardar Usuarios
-    //Revisar donde puede ser invocar función de guardar.
 
 }
 

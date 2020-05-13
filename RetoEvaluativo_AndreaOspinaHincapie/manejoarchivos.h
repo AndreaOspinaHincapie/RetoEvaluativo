@@ -56,8 +56,6 @@ void EscribirEnArchivo(string escribir, string nombre){
         Write<<escribir;
         //Cerrando el archivo:
         Write.close();
-        cout<<"Se han guardado los datos"<<endl;
-
 
     } catch (char c) {
         if(c=='1'){
