@@ -3,7 +3,7 @@
 #include"manejoarchivos.h"
 #include<list>
 #include"pelicula.h"
-/*void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
+void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
     string datos=LeerArchivo("AsientosDisponibles");
     string filaNombre="";
     vector<int>fila;
@@ -14,29 +14,37 @@
     while(posSalto!=string::npos){
         posPuntos=datos.find(":",inicial);
         ID=datos.substr(inicial,posPuntos-inicial);
-        posLin1=datos.find("|",posLin2);
-        filaNombre=datos.substr(posPuntos,posLin1-posPuntos);
-        posLin2=datos.find("|",posLin1);
+        posLin1=datos.find("|",posLin2+1);
+        posLin2=datos.find("|",posLin1+1);
         while(posLin1<posSalto){
+            filaNombre=datos.substr(posPuntos+1,posLin1-posPuntos-1);
             for(unsigned long i=posLin1+1;i<posLin2;i++){
-                if(datos.at(i)!=',') fila.push_back(datos.at(i)-'0');
-
+                if(datos.at(i)!=',' && datos.at(i+1)==',') fila.push_back(datos.at(i)-'0');
+                else if(datos.at(i)!=','&& datos.at(i+1)!=','){
+                    fila.push_back((datos.at(i)-'0')*10+(datos.at(i+1)-'0'));
+                    i++;
+                     }
             }
             Sala.emplace(filaNombre,fila);
             fila.clear();
-            posLin1=datos.find("|",posLin2);
-            filaNombre=datos.substr(posPuntos,posLin1-posPuntos);
-            posLin2=datos.find("|",posLin1);
+            posPuntos=datos.find(":",posLin2+1);
+            posLin1=datos.find("|",posLin2+1);
+            filaNombre=datos.substr(posPuntos+1,posLin1-posPuntos-1);
+            posLin2=datos.find("|",posLin1+1);
         }
-        DatosAsientos.emplace(ID,fila);
+        DatosAsientos.emplace(ID,Sala);
+        inicial=posSalto+1;
+        Sala.clear();
+        posSalto=datos.find('\n',inicial);
     }
 
-}*/
+}
+
 /*void ObtenerTiposAsientos(map<string,map<string,vector<string>>>& DatosTiposAsientos){
     string datos=LeerArchivo("TiposAsientos");
-    vector<int>General;
-    vector<int>Preferencial;
-    vector<int>Vibro;
+    vector<string>General;
+    vector<string>Preferencial;
+    vector<string>Vibro;
     map<string,vector<string>>Tipos;
     string ID="";
     unsigned long posSalto=0, inicial=0, posPuntos=0, posGen=0, posPref=0;
@@ -49,13 +57,13 @@
         posPref=datos.find(";",posGen+1);
         posVibro=datos.find(";",posPref+1);
         for(unsigned long i=posPuntos+1;i<posGen;i++){
-            if(datos.at(i)!=',') General.push_back(datos.at(i));
+            if(datos.at(i)!=',') General.push_back(to_string(datos.at(i)));
         }
         for(unsigned long i=posGen+1;i<posPref;i++){
-            if(datos.at(i)!=',') Preferencial.push_back(datos.at(i));
+            if(datos.at(i)!=',') Preferencial.push_back(to_string(datos.at(i)));
         }
         for(unsigned long i=posPref+1;i<posVibro;i++){
-            if(datos.at(i)!=',') Vibro.push_back(datos.at(i));
+            //if(datos.at(i)!=',')
         }
         Tipos.emplace("Gen",General);
         Tipos.emplace("Pref",Preferencial);
@@ -67,6 +75,8 @@
 }*/
 void ObtenerDatosPeliculas(list<Pelicula>&Peliculas){
     string Datos="";
+    map<string,map<string,vector<int>>>DatosAsientos;
+    ObtenerAsientos(DatosAsientos);
     Datos=LeerArchivo("Peliculas");
     unsigned long posSalto=0, posComa=0, posComaAnt=0, inicial=0;
     posSalto=Datos.find('\n');
@@ -74,6 +84,7 @@ void ObtenerDatosPeliculas(list<Pelicula>&Peliculas){
         Pelicula PIngresar;
         posComa=Datos.find(",",inicial);
         PIngresar.setID(Datos.substr(inicial,posComa-inicial));
+        PIngresar.setAsientos(DatosAsientos[PIngresar.getID()]);
         posComaAnt=posComa+1;
         posComa=Datos.find(",",posComaAnt);
         PIngresar.setNombre(Datos.substr(posComaAnt,posComa-posComaAnt));
@@ -95,6 +106,7 @@ void ObtenerDatosPeliculas(list<Pelicula>&Peliculas){
         posComaAnt=posComa+1;
         posComa=Datos.find(",",posComaAnt);
         PIngresar.setCapacidadMax(unsigned(stoi(Datos.substr(posComaAnt,posComa-posComaAnt))));
+        PIngresar.TiposAsientosInicial();
         posComaAnt=posComa+1;
         posComa=Datos.find(",",posComaAnt);
         PIngresar.setClasificacion(Datos.substr(posComaAnt,posSalto-posComaAnt));
@@ -152,7 +164,7 @@ void GuardarAsientos(list<Pelicula>Peliculas){
     }
     EscribirEnArchivo(guardar,"AsientosDisponibles");
 }
-void GuardarTiposAsientos(list<Pelicula>Peliculas){
+/*void GuardarTiposAsientos(list<Pelicula>Peliculas){
     list<Pelicula>::iterator it;
     string guardar="";
     for(it=Peliculas.begin();it!=Peliculas.end();it++){
@@ -173,7 +185,7 @@ void GuardarTiposAsientos(list<Pelicula>Peliculas){
         guardar=guardar+'\n';
     }
     EscribirEnArchivo(guardar,"TiposAsientos");
-}
+}*/
 
 void IngresarPeliculas(){
     list<Pelicula>PeliculasCine;
@@ -244,19 +256,18 @@ void IngresarPeliculas(){
        cin>>duracion;
        cont=0;
        do{
-       if(cont>0) cout<<"Capacidad maxima superior a 520 asientos"<<endl;
+       if(cont>0) cout<<"Capacidad maxima superior a 520 asientos y minima 1 asiento"<<endl;
        cout<<endl<<"Ingrese la capacidad maxima(520 asientos maximo): ";
        cin>>capacidad;
        cin.ignore();
        cont++;
-       }while(capacidad>520);
+       }while(capacidad>520 || capacidad<=0);
        Pelicula Ing(ID,nombre,genero,duracion,sala,hora,capacidad,clasificacion);
        PeliculasCine.push_back(Ing);
 
     }
     GuardarPeliculas(PeliculasCine);
     GuardarAsientos(PeliculasCine);
-    GuardarTiposAsientos(PeliculasCine);
 }
 
 

@@ -23,7 +23,7 @@ private:
     vector<string>Preferencial;
     vector<string>general;
     vector<string>vibroSound;
-    void TiposAsientosInicial();
+
 
 
 public:
@@ -59,6 +59,7 @@ public:
     bool IsInPreferencial(string fila);
     bool IsInVibro(string fila);
     void ComprarAsiento(string fila, int numero);
+    void TiposAsientosInicial();
 
 };
 

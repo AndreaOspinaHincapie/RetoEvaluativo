@@ -77,6 +77,8 @@ unsigned int Pelicula::getCapacidadMax() const
 void Pelicula::setCapacidadMax(unsigned int value)
 {
     capacidadMax = value;
+    if(capacidadMax%20==0) Filas=capacidadMax/20;
+    else Filas=(capacidadMax/20)+1;
 }
 
 unsigned int Pelicula::getAsientosDisponibles() const

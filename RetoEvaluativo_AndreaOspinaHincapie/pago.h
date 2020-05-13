@@ -15,7 +15,7 @@ template <class T>
 
          }
   //Valor faltante:
-    cout<<"Falta: "<<valor;
+    cout<<"Falta: "<<valor<<endl;
 
 }
 

@@ -91,9 +91,6 @@ void Administrador(){
      }
      else
        cout<<"Contrasena equivocada."<<endl;
-     //GuardarUsuarios(Usuarios);
-
-
 }
 void Usuario(){
     map<string,string>Usuarios;

@@ -14,8 +14,11 @@ string DesplegarFunciones(list<Pelicula>Peliculas){
     cout<<"Peliculas: "<<endl;
     cout<<setw(5)<<left<<"ID"<<setw(15)<<left<<"Nombre"<<setw(10)<<left<<"Genero"<<setw(15)<<left<<"Duracion(min)"<<setw(10)<<left<<"Sala/Hora"<<setw(10)<<left<<"Asientos"<<setw(15)<<right<<"Clasificacion"<<endl;
     for(it=Peliculas.begin();it!=Peliculas.end();it++){
-       cout<<setw(5)<<left<<(*it).getID()<<setw(15)<<left<<(*it).getNombre()<<setw(10)<<left<<(*it).getGenero()<<setw(15)<<left<<(*it).getDuracionMin()<<setw(10)<<left<<to_string((*it).getSala())+"/"+(*it).getHora()<<setw(10)<<left<<(*it).getAsientosDisponibles()<<setw(15)<<right<<(*it).getClasificacion()<<endl;
-    }
+        if((*it).getAsientosDisponibles()!=0){
+        cout<<setw(5)<<left<<(*it).getID()<<setw(15)<<left<<(*it).getNombre()<<setw(10)<<left<<(*it).getGenero()<<setw(15)<<left<<(*it).getDuracionMin()<<setw(10)<<left<<to_string((*it).getSala())+"/"+(*it).getHora()<<setw(10)<<left<<to_string((*it).getAsientosDisponibles())+'/'+to_string((*it).getCapacidadMax())<<setw(15)<<right<<(*it).getClasificacion()<<endl;
+        }
+     }
+    cout<<"--------------------------------------------------------------------------------"<<endl;
     do{
         if(cont>0) cout<<"ID/sala no validos"<<endl;
         cout<<"Ingrese el ID de la funcion que desea ver: "<<endl;
@@ -30,10 +33,15 @@ string DesplegarFunciones(list<Pelicula>Peliculas){
 int TipoAsiento(){
     int option=0;
     cout<<"Seleccione el tipo de asiento: "<<endl;
+    cout<<" ---------------------------"<<endl;
     cout<<"|    Tipo      |    Costo   |"<<endl;
+    cout<<"|---------------------------|"<<endl;
     cout<<"|  1.General   |    $8500   |"<<endl;
+    cout<<"|---------------------------|"<<endl;
     cout<<"|2.Preferencial|    $9500   |"<<endl;
+    cout<<"|---------------------------|"<<endl;
     cout<<"| 3.VibroSound |    $10500  |"<<endl;
+    cout<<" ---------------------------"<<endl;
     do{
         cout<<"Tipo: ";
         cin>>option;
@@ -85,11 +93,11 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
        }
 
    else{
-       vector<string>vibro{"A"};
-       vector<int>asientos{1,2,3,4,5,6,7,8,9,0,11,12,13,14,15,16,17,18,19,20};
+       vector<string>vibro;
+       vector<int>asientos;
        vector<string>::iterator it;
        vector<int>::iterator it2;
-       //vibro=Ver.getVibroSound();
+       vibro=Ver.getVibroSound();
        cout<<"------------------------Pantalla-------------------------"<<endl;
        cout<<"------------------------General--------------------------"<<endl;
        cout<<"----------------------Preferencial-----------------------"<<endl;
@@ -103,6 +111,7 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
            cout<<endl;
        }
    }
+   cout<<"---------------------------------------------------------"<<endl;
    do{
    cout<<"Seleccione la fila: "<<endl;
    getline(cin,fila);
@@ -115,6 +124,8 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
        }while(asiento>20 || asiento<0);
    }while(!Ver.Is_Available(fila,asiento));
    Ver.ComprarAsiento(fila,asiento);
+   GuardarAsientos(Peliculas);
+   GuardarPeliculas(Peliculas);
 }
 
 void ComprarAsiento(){
