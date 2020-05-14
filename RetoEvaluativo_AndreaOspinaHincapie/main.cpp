@@ -8,7 +8,17 @@ int MenuPrincipal();
 int MenuAdmin();
 void Administrador();
 void Usuario();
-//Nota: algunas de las funciones implementadas usan funciones de contenedores implementadas a partir de C++11
+//Nota1: algunas de las funciones implementadas usan funciones de contenedores implementadas a partir de C++11
+/*
+ Nota2. Sobre archivos:
+ En el momento de la entrega, la contraseña de administrador guardada en sudo.txt era sudocont
+ En Peliculas.txt se encuentran guardadas dos películas que ocupan el ID 1 y 2, y la sala 1 y 2.
+ En AsientosDisponibles.txt se encuentran las estructuras de las salas de estas dos películas.
+ En Usuarios.txt se encuentran registrados dos usuarios:
+ 1) Nombre: Ana123 Contraseña: luvi2
+ 2) Nombre: Andre1w Contraseña: lolo
+ Y en ReporteVentas.txt se encuentran las ventas del día 14/5/2020
+*/
 int main()
 {
     //Menú principal: Presentación de perfil usuario y perfil administrador
