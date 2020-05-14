@@ -19,8 +19,8 @@ void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
         while(posLin1<posSalto){
             filaNombre=datos.substr(posPuntos+1,posLin1-posPuntos-1);
             for(unsigned long i=posLin1+1;i<posLin2;i++){
-                if(datos.at(i)!=',' && datos.at(i+1)==',') fila.push_back(datos.at(i)-'0');
-                else if(datos.at(i)!=','&& datos.at(i+1)!=','){
+                if((datos.at(i)!=',' && datos.at(i+1)==',' )||(datos.at(i)!=',' && datos.at(i+1)=='|') ) fila.push_back(datos.at(i)-'0');
+                else if(datos.at(i)!=','&& datos.at(i+1)!=',' && datos.at(i+1)!='|'){
                     fila.push_back((datos.at(i)-'0')*10+(datos.at(i+1)-'0'));
                     i++;
                      }
@@ -40,39 +40,6 @@ void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
 
 }
 
-/*void ObtenerTiposAsientos(map<string,map<string,vector<string>>>& DatosTiposAsientos){
-    string datos=LeerArchivo("TiposAsientos");
-    vector<string>General;
-    vector<string>Preferencial;
-    vector<string>Vibro;
-    map<string,vector<string>>Tipos;
-    string ID="";
-    unsigned long posSalto=0, inicial=0, posPuntos=0, posGen=0, posPref=0;
-    unsigned long posVibro=0;
-    posSalto=datos.find('\n');
-    while(posSalto!=string::npos){
-        posPuntos=datos.find(":",inicial);
-        ID=datos.substr(inicial,posPuntos-inicial);
-        posGen=datos.find(";",inicial);
-        posPref=datos.find(";",posGen+1);
-        posVibro=datos.find(";",posPref+1);
-        for(unsigned long i=posPuntos+1;i<posGen;i++){
-            if(datos.at(i)!=',') General.push_back(to_string(datos.at(i)));
-        }
-        for(unsigned long i=posGen+1;i<posPref;i++){
-            if(datos.at(i)!=',') Preferencial.push_back(to_string(datos.at(i)));
-        }
-        for(unsigned long i=posPref+1;i<posVibro;i++){
-            //if(datos.at(i)!=',')
-        }
-        Tipos.emplace("Gen",General);
-        Tipos.emplace("Pref",Preferencial);
-        Tipos.emplace("Vibro",Vibro);
-        DatosTiposAsientos.emplace(ID,Tipos);
-        inicial=posSalto+1;
-        posSalto=datos.find('\n',inicial);
-    }
-}*/
 void ObtenerDatosPeliculas(list<Pelicula>&Peliculas){
     string Datos="";
     map<string,map<string,vector<int>>>DatosAsientos;
@@ -164,28 +131,6 @@ void GuardarAsientos(list<Pelicula>Peliculas){
     }
     EscribirEnArchivo(guardar,"AsientosDisponibles");
 }
-/*void GuardarTiposAsientos(list<Pelicula>Peliculas){
-    list<Pelicula>::iterator it;
-    string guardar="";
-    for(it=Peliculas.begin();it!=Peliculas.end();it++){
-        guardar=guardar+(*it).getID()+":";
-        unsigned long sizeGen=(*it).getGeneral().size(), sizePref=(*it).getPreferencial().size(), sizeVibro=(*it).getVibroSound().size();
-        for(unsigned i=0;i<sizeGen;i++){
-            if(i!=sizeGen-1) guardar=guardar+(*it).getGeneral().at(i)+",";
-            else guardar=guardar+(*it).getGeneral().at(i)+";";
-        }
-        for(unsigned i=0;i<sizePref;i++){
-            if(i!=sizePref-1) guardar=guardar+(*it).getPreferencial().at(i)+",";
-            else guardar=guardar+(*it).getPreferencial().at(i)+";";
-        }
-        for(unsigned i=0;i<sizeVibro;i++){
-            if(i!=sizeVibro-1) guardar=guardar+(*it).getVibroSound().at(i)+",";
-            else guardar=guardar+(*it).getVibroSound().at(i)+";";
-        }
-        guardar=guardar+'\n';
-    }
-    EscribirEnArchivo(guardar,"TiposAsientos");
-}*/
 
 void IngresarPeliculas(){
     list<Pelicula>PeliculasCine;
@@ -257,12 +202,12 @@ void IngresarPeliculas(){
        cin.ignore();
        cont=0;
        do{
-       if(cont>0) cout<<"Capacidad maxima superior a 520 asientos y minima 1 asiento"<<endl;
-       cout<<endl<<"Ingrese la capacidad maxima(520 asientos maximo): ";
+       if(cont>0) cout<<"Capacidad maxima superior a 520 asientos y minimo 60 asientos"<<endl;
+       cout<<endl<<"Ingrese la capacidad maxima(520 asientos maximo y 60 minimo): ";
        cin>>capacidad;
        cin.ignore();
        cont++;
-       }while(capacidad>520 || capacidad<=0);
+       }while(capacidad>520 || capacidad<60);
        Pelicula Ing(ID,nombre,genero,duracion,sala,hora,capacidad,clasificacion);
        PeliculasCine.push_back(Ing);
 

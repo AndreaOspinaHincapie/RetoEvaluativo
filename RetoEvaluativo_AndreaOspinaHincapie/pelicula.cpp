@@ -147,7 +147,7 @@ vector<string> Pelicula::getVibroSound() const
 
 bool Pelicula::Is_Available(string fila,int asiento)
 {
-    if(Asientos.at(fila).at(unsigned(asiento))==0) return false;
+    if(Asientos.at(fila).at(unsigned(asiento-1))==0) return false;
     else return true;
 }
 

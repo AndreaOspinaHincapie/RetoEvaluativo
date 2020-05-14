@@ -1,5 +1,4 @@
 #include"reporteventas.h"
-#include"pelicula.h"
 #include"manejoarchivos.h"
 #include"administrarusuarios.h"
 #include"manejopeliculas.h"
@@ -54,6 +53,7 @@ int MenuAdmin(){
     cout<<"2. Ingresar peliculas "<<endl;
     cout<<"3. Ofertar asientos "<<endl;
     cout<<"4. Reporte diario de ventas "<<endl;
+    cout<<"5. Cambiar contrasena de administrador "<<endl;
     cout<<"Ingrese el numero de la opcion o 0 para salir"<<endl;
     cin>>op;
     cin.ignore();
@@ -65,8 +65,8 @@ void Administrador(){
      string passwordIng="",password="";
      cout<<"Ingrese la contrasena de administrador: "<<endl;
      getline(cin,passwordIng);
-     password=LeerArchivo("sudo");
-     if(password==passwordIng+'\n'){
+     password=Descodificar(4,LeerArchivo("sudo"));
+     if(password==passwordIng){
          int option=0;
          option=MenuAdmin();
          while(option!=0){
@@ -83,6 +83,9 @@ void Administrador(){
              case 4:
                  ReporteVentas();
                  break;
+             case 5:
+                 CambiarContAdmin();
+                 break;
              default:
                  cout<<"Opcion no disponible, ingrese otro numero"<<endl;
                  break;
@@ -97,7 +100,7 @@ void Usuario(){
     map<string,string>Usuarios;
     string user="",password="";
     string archivo=LeerArchivo("Usuarios");
-    ObtenerUsuarios(archivo,Usuarios);
+    ObtenerUsuarios(Descodificar(4,archivo),Usuarios);
     cout<<"Inicio de sesion: "<<endl;
     cout<<"Nombre de usuario: ";
     getline(cin,user);
