@@ -4,6 +4,7 @@
 #include<list>
 #include"pelicula.h"
 void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
+    //REVISAR
     string datos=LeerArchivo("AsientosDisponibles");
     string filaNombre="";
     vector<int>fila;

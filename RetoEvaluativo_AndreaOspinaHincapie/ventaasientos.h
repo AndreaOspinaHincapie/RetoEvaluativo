@@ -53,6 +53,7 @@ int TipoAsiento(){
     return option;
 };
 int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pelicula>Peliculas){
+   //REVISAR: pagos e impresion asientos
    Pelicula Ver;
    list<Pelicula>::iterator it;
    int cont=0, total=0;
@@ -112,6 +113,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
                    total++;
                cout<<endl;
            }
+         }
             cout<<"---------------------------------------------------------"<<endl;
             if(cont!=total){
                do{
@@ -136,7 +138,6 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
            cout<<"----------------------Preferencial-----------------------"<<endl;
            for(it=vibro.begin();it!=vibro.end();it++){
                asientos=Ver.getAsientos().at((*it));
-               asientos.shrink_to_fit();
                cout<<(*it)<<": ";
                for(it2=asientos.begin();it2!=asientos.end();it2++){
                    if((*it2)!=0) cout<<(*it2)<<" ";
@@ -170,7 +171,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
            GuardarAsientos(Peliculas);
            GuardarPeliculas(Peliculas);
        }
-   }
+
    else{
        cout<<"En el momento no hay funciones disponibles. "<<endl;
        return 1;

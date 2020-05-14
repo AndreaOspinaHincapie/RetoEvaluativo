@@ -103,6 +103,15 @@ map<string, vector<int> > Pelicula::getAsientos() const
 
 void Pelicula::setAsientosInicial()
 {
+    /*
+     Creando estructura de sala según capacidad maxima ingresada.
+     Una sala tendrá 20 asientos por fila, por lo que la cantidad de filas
+     se obtiene a través de la división.
+     Si la capacidad máxima no es divisible por 20, se agregará una fila vibrosound
+     con los asientos faltantes.
+     La estructura se almacena en un mapa cuyas keys son los nombres de cada fila
+     y los values son vectores de enteros con el número del asiento.
+    */
     string nombreF="";
     if(capacidadMax%20==0){
         Filas=capacidadMax/20;
@@ -147,12 +156,16 @@ vector<string> Pelicula::getVibroSound() const
 
 bool Pelicula::Is_Available(string fila,int asiento)
 {
+    /*
+    Función que revisa si asiento en determinada fila está disponible.
+    */
     if(Asientos.at(fila).at(unsigned(asiento-1))==0) return false;
     else return true;
 }
 
 bool Pelicula::IsInGeneral(string fila)
 {
+    //Función que revisa si fila se encuentra en la lista de filas de asientos generales
     for(unsigned i=0;i<general.size();i++){
         if(fila==general.at(i)) return true;
     }
@@ -161,6 +174,7 @@ bool Pelicula::IsInGeneral(string fila)
 
 bool Pelicula::IsInPreferencial(string fila)
 {
+    //Función que revisa si fila se encuentra en la lista de filas de asientos preferenciales
     for(unsigned i=0;i<Preferencial.size();i++){
         if(fila==Preferencial.at(i)) return true;
     }
@@ -169,6 +183,7 @@ bool Pelicula::IsInPreferencial(string fila)
 
 bool Pelicula::IsInVibro(string fila)
 {
+  //Función que revisa si fila se encuentra en la lista de filas de asientos vibrosound
     for(unsigned i=0;i<vibroSound.size();i++){
         if(fila==vibroSound.at(i)) return true;
     }
@@ -197,6 +212,12 @@ void Pelicula::setPreferencial(const vector<string> &value)
 
 void Pelicula::TiposAsientosInicial()
 {
+    /*
+     Función que establece filas generales, preferenciales y vibrosound.
+     Se divide la cantidad de filas entre los tres tipos de manera que si
+     la cantidad de filas no es divisible entre tres, el tipo de asientos con mayor
+     cantidad de filas será el tipo general.
+    */
     int filasGeneral=(Filas/3)+(Filas%3), filasPreferencial=(Filas/3)+filasGeneral;
     string fila="";
     for(int i=0;i<Filas;i++){
@@ -209,6 +230,8 @@ void Pelicula::TiposAsientosInicial()
 
 void Pelicula::ComprarAsiento(string fila, int numero)
 {
+    //Función para comprar asiento. Se cambia valor de asiento a cero y se resta uno
+    //a los asientosDisponibles.
     Asientos[fila].at(unsigned(numero-1))=0;
     asientosDisponibles--;
 }
@@ -219,6 +242,7 @@ Pelicula::Pelicula()
 
 Pelicula::Pelicula(string _ID, string _nombre, string _genero, unsigned _duracion, unsigned _sala, string _hora,  unsigned _capMax, string _clasificacion)
 {
+    //Constructor al que se le asignan inicialmente valores a los atributos.
     ID=_ID;
     nombre=_nombre;
     genero=_genero;

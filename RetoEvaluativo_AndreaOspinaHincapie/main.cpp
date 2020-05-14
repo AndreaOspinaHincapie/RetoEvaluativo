@@ -11,8 +11,9 @@ void Usuario();
 
 int main()
 {
+    //Menú principal: Presentación de perfil usuario y perfil administrador
     int option=0;
-    option=MenuPrincipal();
+    option=MenuPrincipal(); //Función que imprime menú principal
     while(option!=0){
         switch (option) {
         case 1:
@@ -61,7 +62,17 @@ int MenuAdmin(){
     return op;
 }
 void Administrador(){
+    /*
+     Función para realizar las siguientes funcionalidades en el perfil administrador:
+     -Registrar usuarios al servicio por suscripción de reserva de asientos.
+     -Ingresar Películas.
+     -Ofrecer asientos en taquilla para usuarios no inscritos al sistema.
+     -Obtener reporte de ventas diario sobre asientos vendidos y dinero recaudado
+     dividido por tipo de asiento.
+     -Cambiar contraseña de administrador.
+    */
      map<string,string>Usuarios;
+     //Inicio de sesión de administrador:
      string passwordIng="",password="";
      cout<<"Ingrese la contrasena de administrador: "<<endl;
      getline(cin,passwordIng);
@@ -97,16 +108,24 @@ void Administrador(){
        cout<<"Contrasena equivocada."<<endl;
 }
 void Usuario(){
+    /*
+     Función para implementar funcionalidades de usuario:
+     1)Acceder con nombre de usuario y contraseña.
+     2)Comprar asientos.
+    */
     map<string,string>Usuarios;
     string user="",password="";
     string archivo=LeerArchivo("Usuarios");
+    //Obtener información de base de datos de usuario.
     ObtenerUsuarios(Descodificar(4,archivo),Usuarios);
+    //Inicio de sesión:
     cout<<"Inicio de sesion: "<<endl;
     cout<<"Nombre de usuario: ";
     getline(cin,user);
     cout<<endl<<"Contrasena:";
     getline(cin,password);
     if(Is_Registered(user,password,Usuarios)){
+        //Comprar asiento si inicio de sesión fue exitoso.
         ComprarAsiento();
     }
     else{
