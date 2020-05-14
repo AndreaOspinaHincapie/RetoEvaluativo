@@ -4,7 +4,6 @@
 #include<list>
 #include"pelicula.h"
 void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
-    //REVISAR
     string datos=LeerArchivo("AsientosDisponibles");
     string filaNombre="";
     vector<int>fila;
@@ -150,6 +149,7 @@ void IngresarPeliculas(){
     cin>>cantidad;
     cin.ignore();
     for(int i=0;i<cantidad;i++){
+        cout<<"Ejemplos de ingreso de hora: 12pm, 7:30am,7pm"<<endl;
         cont=0;
         do{
             if(cont>0)cout<<endl<<"La sala/ID ya se encuentran ocupados "<<endl;

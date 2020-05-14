@@ -221,7 +221,7 @@ void ComprarAsiento(){
                 }while(pago<9500);
                 Devuelta<int>(9500,pago);
                 APref++;
-                VenGen+=9500;
+                VenPref+=9500;
             }
             else{
                 cout<<endl<<"Total: $10500"<<endl;
