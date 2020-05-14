@@ -157,6 +157,13 @@ string Descodificar(unsigned n, string Coded){
 }
 
 void ObtenerUsuarios(string archivoLeido, map<string,string>& Usuarios){
+    /*
+     Función que recibe un string con los datos leidos de Usuarios.txt.
+     Recorre el string obteniendo los datos según la estructura del archivo
+     y retorna por referencia el mapa de usuarios con la información recuperada.
+     Formato de Usuarios.txt:
+     NombreUsuario:contraseña\n
+    */
     unsigned long inicio=0, posSaltos=0, posPuntos=0;
     string nombre="", password="";
     posSaltos=archivoLeido.find('\n');
@@ -171,6 +178,10 @@ void ObtenerUsuarios(string archivoLeido, map<string,string>& Usuarios){
 
 }
 bool Is_Registered(string nombre, string password, map<string,string>Usuarios){
+    /*
+     Función que revisa si nombre de usuario y contraseña ingresados se encuentran en el mapa de usuarios.
+     Retorna true si el usuario está registrado y false de lo contrario.
+     */
     map<string,string>::iterator it;
     it=Usuarios.find(nombre);
     if(it!=Usuarios.end() && (*it).second==password)
@@ -180,19 +191,26 @@ bool Is_Registered(string nombre, string password, map<string,string>Usuarios){
 
 }
 void GuardarUsuarios(map<string,string>Usuarios){
+    /*
+     Función que guarda los datos de usuarios en Usuarios.txt con el formato:
+     Usuario:contraseña\n
+    */
     string escribir="";
     map<string,string>::iterator it;
     for(it=Usuarios.begin(); it!=Usuarios.end();it++){
         escribir=escribir+it->first+":"+it->second+'\n';
     }
-    EscribirEnArchivo(Codificar(4,StringAbin(escribir)),"Usuarios");
+    EscribirEnArchivo(Codificar(4,StringAbin(escribir)),"Usuarios"); //Codificación de los datos.
 }
 void RegistrarUsuarios(){
+    /*
+     Función que implementa la funcionalidad de administrador de registrar nuevos usuarios.
+    */
     int numUsers=0,cont=0;
     string archivo=LeerArchivo("Usuarios");
     string nombre="", password="";
     map<string,string>Usuarios;
-    ObtenerUsuarios(Descodificar(4,archivo),Usuarios);
+    ObtenerUsuarios(Descodificar(4,archivo),Usuarios); //Descodificando datos para obtener mapa de Usuarios.
     cout<<"Ingrese el numero de usuarios a registrar: "<<endl;
     cin>>numUsers;
     cin.ignore();
@@ -200,40 +218,47 @@ void RegistrarUsuarios(){
         cont=0;
         do{
 
-          if(cont>0){
-              if(Usuarios.count(nombre)==1) cout<<endl<<"el nombre de usuario de ya se encuentra en uso."<<endl;
-              else cout<<"Nombre de usuario invalido"<<endl;
-          }
+              if(cont>0){
+                  //Si se ingresó datos no válidos anteriormente.
+                  if(Usuarios.count(nombre)==1) cout<<endl<<"el nombre de usuario de ya se encuentra en uso."<<endl;
+                  else cout<<"Nombre de usuario invalido"<<endl;
+              }
           cout<<i+1<<".Ingrese el nombre de usuario (no debe contener dos puntos o comas): ";
           getline(cin,nombre);
           cont++;
-
+        //Repite proceso si ya está registrado o contienen los datos el ":" o ","
         }while(Usuarios.count(nombre)==1 || nombre.find(":")!=string::npos || nombre.find(",")!=string::npos);
         cont=0;
         do{
-        if(cont>0)cout<<"Contrasena invalida. no puede contener comas"<<endl;
-        cout<<endl<<i+1<<".Ingrese la contrasena del usuario (no debe contener comas): ";
-        getline(cin,password);
-        cont++;
+            //Ingreso y verificación de contraseña
+            if(cont>0)cout<<"Contrasena invalida. no puede contener comas"<<endl;
+            cout<<endl<<i+1<<".Ingrese la contrasena del usuario (no debe contener comas): ";
+            getline(cin,password);
+            cont++;
         }while(password.find(",")!=string::npos);
-        Usuarios.emplace(nombre,password);
+        Usuarios.emplace(nombre,password); //Guardando usuario en mapa de usuarios
 
     }
     GuardarUsuarios(Usuarios);
 }
 void CambiarContAdmin(){
+    /*
+     Función que implementa la funcionalidad de cambiar la contraseña de administrador.
+    */
     string newPass="", OldPass="", Descodif="";
     cout<<"Cambiar contrasena de administrador: "<<endl;
     cout<<"Ingrese la contrasena actual: "<<endl;
     getline(cin,OldPass);
-    Descodif=Descodificar(4,LeerArchivo("sudo"));
+    Descodif=Descodificar(4,LeerArchivo("sudo")); //Descodificando contraseña antigua
     if(OldPass==Descodif){
+        //Si es correcta la contraseña
         cout<<"Ingrese la contrasena nueva: "<<endl;
         getline(cin,newPass);
         EscribirEnArchivo(Codificar(4,StringAbin(newPass)),"sudo");
         cout<<"Se ha modificado la contrasena de administrador"<<endl;
     }
     else{
+        //Si es equivocada la contraseña vieja.
         cout<<"Contrasena equivocada"<<endl;
     }
 }

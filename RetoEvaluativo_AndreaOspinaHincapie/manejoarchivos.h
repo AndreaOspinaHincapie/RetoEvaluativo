@@ -3,6 +3,7 @@
 #include<fstream>
 #include<string>
 #include<iostream>
+#include<exception>
 using namespace std;
 string LeerArchivo(string nombre){
     /*

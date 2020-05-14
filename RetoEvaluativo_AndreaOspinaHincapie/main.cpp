@@ -8,7 +8,7 @@ int MenuPrincipal();
 int MenuAdmin();
 void Administrador();
 void Usuario();
-
+//Nota: algunas de las funciones implementadas usan funciones de contenedores implementadas a partir de C++11
 int main()
 {
     //Menú principal: Presentación de perfil usuario y perfil administrador
@@ -76,7 +76,7 @@ void Administrador(){
      string passwordIng="",password="";
      cout<<"Ingrese la contrasena de administrador: "<<endl;
      getline(cin,passwordIng);
-     password=Descodificar(4,LeerArchivo("sudo"));
+     password=Descodificar(4,LeerArchivo("sudo")); //Descodificando contraseña y verificando que es correcta
      if(password==passwordIng){
          int option=0;
          option=MenuAdmin();

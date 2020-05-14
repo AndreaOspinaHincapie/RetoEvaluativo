@@ -76,6 +76,7 @@ unsigned int Pelicula::getCapacidadMax() const
 
 void Pelicula::setCapacidadMax(unsigned int value)
 {
+    //Función con la que se establece la capacidad máxima y el número de filas que tendrá la sala.
     capacidadMax = value;
     if(capacidadMax%20==0) Filas=capacidadMax/20;
     else Filas=(capacidadMax/20)+1;
@@ -110,12 +111,14 @@ void Pelicula::setAsientosInicial()
      Si la capacidad máxima no es divisible por 20, se agregará una fila vibrosound
      con los asientos faltantes.
      La estructura se almacena en un mapa cuyas keys son los nombres de cada fila
-     y los values son vectores de enteros con el número del asiento.
+     y los values son vectores de enteros con el número de los asientos.
     */
     string nombreF="";
     if(capacidadMax%20==0){
+        //Capacidad máxima divisible entre 20.
         Filas=capacidadMax/20;
         for(int i=0;i<Filas;i++){
+            //Añadiendo datos a las filas: números del uno a 20 y nombres de fila de A a Z.
             vector<int>AsientosFila;
             nombreF=char(65+i);
             for(int j=1;j<=20;j++){
@@ -125,18 +128,20 @@ void Pelicula::setAsientosInicial()
         }
     }
     else{
+        //Si capacidad no es divisible entre 20.
         Filas=(capacidadMax/20)+1;
         int ultimaF=capacidadMax%20;
         for(int i=0; i<Filas;i++){
             vector<int>AsientosFila;
             nombreF=char(65+i);
+            //Haciendo que última fila (vibrosound)sea la filacon menor cantidad de asientos:
             if(i<Filas-1){
             for(int j=1;j<=20;j++){
                 AsientosFila.push_back(j);
             }
             Asientos.emplace(nombreF,AsientosFila);
         }
-        else{
+            else{
                 for(int i=1;i<=ultimaF;i++){
                  AsientosFila.push_back(i);
                 }
