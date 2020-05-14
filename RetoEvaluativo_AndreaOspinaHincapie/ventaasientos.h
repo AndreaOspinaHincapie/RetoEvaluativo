@@ -6,8 +6,8 @@
 #include<list>
 #include<manejopeliculas.h>
 #include<iomanip>
+#include<reporteventas.h>
 string DesplegarFunciones(list<Pelicula>Peliculas){
-    cin.ignore();
     list<Pelicula>::iterator it;
     string ID="";
     unsigned sala=0,cont=0;
@@ -132,6 +132,12 @@ void ComprarAsiento(){
     string ID="",fila="";
     int tipo=0, asiento=0;
     int pago=0;
+    int cont=0;
+    string fecha="", fechaActual="";
+    fechaActual=ObtenerFechaActual();
+    int AGen=0,VenGen=0,APref=0,VenPref=0,AVibro=0,VenVibro=0;
+    LeerVentas(fecha,AGen,VenGen,APref,VenPref,AVibro,VenVibro);
+    if(fechaActual!=fecha){AGen=0;VenGen=0;APref=0;VenPref=0;AVibro=0;VenVibro=0;}
     list<Pelicula> Peliculas;
     ObtenerDatosPeliculas(Peliculas);
     ID=DesplegarFunciones(Peliculas);
@@ -139,23 +145,43 @@ void ComprarAsiento(){
     AsientosDisponibles(ID,tipo,fila,asiento,Peliculas);
     if(tipo==1){
        cout<<endl<<"Total: $8500"<<endl;
-       cout<<"Ingrese su pago: "<<endl;
-       cin>>pago;
+       do{
+           if(cont>0) cout<<"Pago no valido."<<endl;
+           cout<<"Ingrese su pago: "<<endl;
+           cin>>pago;
+           cont++;
+       }while(pago<8500);
        Devuelta<int>(8500,pago);
+       AGen++;
+       VenGen+=8500;
     }
     else if(tipo==2){
         cout<<endl<<"Total: $9500"<<endl;
-        cout<<"Ingrese su pago: "<<endl;
-        cin>>pago;
+        do{
+            if(cont>0) cout<<"Pago no valido."<<endl;
+            cout<<"Ingrese su pago: "<<endl;
+            cin>>pago;
+            cont++;
+        }while(pago<9500);
         Devuelta<int>(9500,pago);
+        APref++;
+        VenGen+=9500;
     }
     else{
         cout<<endl<<"Total: $10500"<<endl;
-        cout<<"Ingrese su pago: "<<endl;
-        cin>>pago;
+        do{
+            if(cont>0) cout<<"Pago no valido."<<endl;
+            cout<<"Ingrese su pago: "<<endl;
+            cin>>pago;
+            cont++;
+        }while(pago<10500);
         Devuelta<int>(10500,pago);
+        AVibro++;
+        VenVibro+=10500;
 
     }
+    GuardarVentas(AGen,VenGen,APref,VenPref,AVibro,VenVibro);
+
 }
 
 #endif // VENTAASIENTOS_H

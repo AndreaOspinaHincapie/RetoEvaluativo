@@ -80,7 +80,7 @@ void Administrador(){
                  ComprarAsiento();
                  break;
              case 4:
-                 //Reporte diario de ventas
+                 ReporteVentas();
                  break;
              default:
                  cout<<"Opcion no disponible, ingrese otro numero"<<endl;
