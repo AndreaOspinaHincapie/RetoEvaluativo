@@ -123,7 +123,7 @@ void GuardarPeliculas(list<Pelicula>Peliculas){
         Guardar=Guardar+(*it).getID()+","+(*it).getNombre()+","+(*it).getGenero()+","+to_string((*it).getDuracionMin())+","+to_string((*it).getSala())+","+(*it).getHora()+","+to_string((*it).getAsientosDisponibles())+","+to_string((*it).getCapacidadMax())+","+(*it).getClasificacion()+'\n';
     }
     EscribirEnArchivo(Guardar,"Peliculas");
-};
+}
 bool IsInMovieDatabase(list<Pelicula>PeliculasCine, string ID, unsigned sala){
     list<Pelicula>::iterator it;
     for(it=PeliculasCine.begin();it!=PeliculasCine.end();it++){
@@ -254,6 +254,7 @@ void IngresarPeliculas(){
 
        cout<<endl<<"Ingrese la duracion en minutos: ";
        cin>>duracion;
+       cin.ignore();
        cont=0;
        do{
        if(cont>0) cout<<"Capacidad maxima superior a 520 asientos y minima 1 asiento"<<endl;

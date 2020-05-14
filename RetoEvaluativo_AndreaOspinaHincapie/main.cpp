@@ -41,6 +41,7 @@ int MenuPrincipal(){
     cout<<"2. Soy usuario. "<<endl;
     cout<<"Ingrese el numero de la opcion o 0 para salir"<<endl;
     cin>>op;
+    cin.ignore();
     cout<<"--------------------------------------------------------------------------------"<<endl;
     return op;
 }
@@ -55,6 +56,7 @@ int MenuAdmin(){
     cout<<"4. Reporte diario de ventas "<<endl;
     cout<<"Ingrese el numero de la opcion o 0 para salir"<<endl;
     cin>>op;
+    cin.ignore();
     cout<<"--------------------------------------------------------------------------------"<<endl;
     return op;
 }
@@ -62,7 +64,6 @@ void Administrador(){
      map<string,string>Usuarios;
      string passwordIng="",password="";
      cout<<"Ingrese la contrasena de administrador: "<<endl;
-     cin.ignore();
      getline(cin,passwordIng);
      password=LeerArchivo("sudo");
      if(password==passwordIng+'\n'){
@@ -99,7 +100,6 @@ void Usuario(){
     ObtenerUsuarios(archivo,Usuarios);
     cout<<"Inicio de sesion: "<<endl;
     cout<<"Nombre de usuario: ";
-    cin.ignore();
     getline(cin,user);
     cout<<endl<<"Contrasena:";
     getline(cin,password);

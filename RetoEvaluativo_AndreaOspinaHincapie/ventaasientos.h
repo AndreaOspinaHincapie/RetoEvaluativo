@@ -45,11 +45,11 @@ int TipoAsiento(){
     do{
         cout<<"Tipo: ";
         cin>>option;
+        cin.ignore();
     }while(option!=1 && option!=2 && option!=3);
     return option;
 };
 void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pelicula>Peliculas){
-   cin.ignore();
    Pelicula Ver;
    list<Pelicula>::iterator it;
    for(it=Peliculas.begin();it!=Peliculas.end();it++){
@@ -123,7 +123,7 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
        cin.ignore();
        }while(asiento>20 || asiento<0);
    }while(!Ver.Is_Available(fila,asiento));
-   Ver.ComprarAsiento(fila,asiento);
+   (*it).ComprarAsiento(fila,asiento);
    GuardarAsientos(Peliculas);
    GuardarPeliculas(Peliculas);
 }
@@ -149,6 +149,7 @@ void ComprarAsiento(){
            if(cont>0) cout<<"Pago no valido."<<endl;
            cout<<"Ingrese su pago: "<<endl;
            cin>>pago;
+           cin.ignore();
            cont++;
        }while(pago<8500);
        Devuelta<int>(8500,pago);
@@ -161,6 +162,7 @@ void ComprarAsiento(){
             if(cont>0) cout<<"Pago no valido."<<endl;
             cout<<"Ingrese su pago: "<<endl;
             cin>>pago;
+            cin.ignore();
             cont++;
         }while(pago<9500);
         Devuelta<int>(9500,pago);
@@ -173,6 +175,7 @@ void ComprarAsiento(){
             if(cont>0) cout<<"Pago no valido."<<endl;
             cout<<"Ingrese su pago: "<<endl;
             cin>>pago;
+            cin.ignore();
             cont++;
         }while(pago<10500);
         Devuelta<int>(10500,pago);
