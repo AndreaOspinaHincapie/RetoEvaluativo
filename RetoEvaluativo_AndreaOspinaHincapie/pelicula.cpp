@@ -159,7 +159,8 @@ bool Pelicula::Is_Available(string fila,int asiento)
     /*
     Función que revisa si asiento en determinada fila está disponible.
     */
-    if(Asientos.at(fila).at(unsigned(asiento-1))==0) return false;
+    if(Asientos.at(fila).size()<unsigned(asiento)) return false;
+    else if(Asientos.at(fila).at(unsigned(asiento-1))==0 ) return false;
     else return true;
 }
 

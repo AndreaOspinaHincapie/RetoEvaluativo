@@ -53,7 +53,6 @@ int TipoAsiento(){
     return option;
 };
 int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pelicula>Peliculas){
-   //REVISAR: pagos e impresion asientos
    Pelicula Ver;
    list<Pelicula>::iterator it;
    int cont=0, total=0;
@@ -70,7 +69,8 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
           vector<string>::iterator it;
           vector<int>::iterator it2;
           general=Ver.getGeneral();
-          int cont=0,total=0;
+          cont=0;
+          total=0;
           cout<<"------------------------Pantalla-------------------------"<<endl;
           for(it=general.begin();it!=general.end();it++){
               asientos=Ver.getAsientos().at((*it));

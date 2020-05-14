@@ -12,13 +12,21 @@ void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
     string ID="";
     unsigned long posPuntos=0, posSalto=0, posLin1=0, posLin2=0,inicial=0;
     posSalto=datos.find('\n');
+    posPuntos=datos.find(":",inicial);
+    ID=datos.substr(inicial,posPuntos-inicial);
+    posLin1=datos.find("|",posLin2+1);
+    posLin2=datos.find("|",posLin1+1);
     while(posSalto!=string::npos){
-        posPuntos=datos.find(":",inicial);
-        ID=datos.substr(inicial,posPuntos-inicial);
-        posLin1=datos.find("|",posLin2+1);
-        posLin2=datos.find("|",posLin1+1);
         while(posLin1<posSalto){
-            filaNombre=datos.substr(posPuntos+1,posLin1-posPuntos-1);
+            if(DatosAsientos.size()>=1 && Sala.size()<1){
+              posPuntos=datos.find(":",posPuntos+1);
+              ID=datos.substr(inicial,posPuntos-inicial);
+              filaNombre=datos.substr(posPuntos+1,posLin1-posPuntos-1);
+            }
+            else{
+              filaNombre=datos.substr(posPuntos+1,posLin1-posPuntos-1);
+            }
+
             for(unsigned long i=posLin1+1;i<posLin2;i++){
                 if((datos.at(i)!=',' && datos.at(i+1)==',' )||(datos.at(i)!=',' && datos.at(i+1)=='|') ) fila.push_back(datos.at(i)-'0');
                 else if(datos.at(i)!=','&& datos.at(i+1)!=',' && datos.at(i+1)!='|'){
@@ -30,7 +38,6 @@ void ObtenerAsientos(map<string,map<string,vector<int>>>&DatosAsientos){
             fila.clear();
             posPuntos=datos.find(":",posLin2+1);
             posLin1=datos.find("|",posLin2+1);
-            filaNombre=datos.substr(posPuntos+1,posLin1-posPuntos-1);
             posLin2=datos.find("|",posLin1+1);
         }
         DatosAsientos.emplace(ID,Sala);
