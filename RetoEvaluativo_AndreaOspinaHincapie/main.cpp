@@ -43,6 +43,13 @@ int MenuPrincipal(){
     cin>>op;
     cin.ignore();
     cout<<"--------------------------------------------------------------------------------"<<endl;
+    while(cin.fail()){
+        cin.clear();
+        cin.ignore();
+        cout<<"Opción no valida. Ingrese el numero o 0 para salir"<<endl;
+        cin>>op;
+        cin.ignore();
+    }
     return op;
 }
 int MenuAdmin(){
@@ -58,6 +65,13 @@ int MenuAdmin(){
     cout<<"Ingrese el numero de la opcion o 0 para salir"<<endl;
     cin>>op;
     cin.ignore();
+    while(cin.fail()){
+        cin.clear();
+        cin.ignore();
+        cout<<"Opción no valida. Ingrese el numero o 0 para salir"<<endl;
+        cin>>op;
+        cin.ignore();
+    }
     cout<<"--------------------------------------------------------------------------------"<<endl;
     return op;
 }
