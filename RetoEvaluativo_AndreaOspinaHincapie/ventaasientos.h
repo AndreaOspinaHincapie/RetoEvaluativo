@@ -8,11 +8,16 @@
 #include<iomanip>
 #include<reporteventas.h>
 string DesplegarFunciones(list<Pelicula>Peliculas){
+    /*
+     Función que recibe la lista de películas e imprime en consola cada una de las características de estas.
+     Retorna el ID de la película elegida por el usuario.
+    */
     list<Pelicula>::iterator it;
     string ID="";
     unsigned sala=0,cont=0;
     cout<<"Peliculas: "<<endl;
     if(Peliculas.size()>0){
+        //Si hay películas, se imprimen las funciones
         cout<<setw(5)<<left<<"ID"<<setw(15)<<left<<"Nombre"<<setw(10)<<left<<"Genero"<<setw(15)<<left<<"Duracion(min)"<<setw(10)<<left<<"Sala/Hora"<<setw(10)<<left<<"Asientos"<<setw(15)<<right<<"Clasificacion"<<endl;
         for(it=Peliculas.begin();it!=Peliculas.end();it++){
             if((*it).getAsientosDisponibles()!=0){
@@ -21,6 +26,7 @@ string DesplegarFunciones(list<Pelicula>Peliculas){
          }
         cout<<"--------------------------------------------------------------------------------"<<endl;
         do{
+            //Seleccionando ID y sala de la película que desea verse
             if(cont>0) cout<<"ID/sala no validos"<<endl;
             cout<<"Ingrese el ID de la funcion que desea ver: "<<endl;
             getline(cin,ID);
@@ -30,10 +36,13 @@ string DesplegarFunciones(list<Pelicula>Peliculas){
             cont++;
         }while(!IsInMovieDatabase(Peliculas,ID,sala));
     }
-    else{cout<<"Por el momento no hay funciones disponibles"<<endl;}
+    else{ //Si no hay películas en la base de datos
+        cout<<"Por el momento no hay funciones disponibles"<<endl;
+    }
      return ID;
 }
 int TipoAsiento(){
+    //Imprimiendo tabla con tipos de asientos disponibles.
     int option=0;
     cout<<"Seleccione el tipo de asiento: "<<endl;
     cout<<" ---------------------------"<<endl;
@@ -53,6 +62,13 @@ int TipoAsiento(){
     return option;
 };
 int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pelicula>Peliculas){
+    /*
+     Función que recibe un ID, un tipo de asiento, la lista de películas y retorna por referencia
+     la fila y asiento elegidos por el usuario tras imprimir asientos en consola.
+     Para facilidad de lectura, sólo se muestran los asientos de cada categoría y su ubicación respecto a pantalla
+     y otras categorías.
+     Retorna 0 si no hay asientos disponibles y 1 en caso contrario.
+    */
    Pelicula Ver;
    list<Pelicula>::iterator it;
    int cont=0, total=0;
@@ -64,6 +80,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
            }
        }
        if(tipo==1){
+           //Si se elige general
           vector<string>general;
           vector<int>asientos;
           vector<string>::iterator it;
@@ -78,7 +95,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
               for(it2=asientos.begin();it2!=asientos.end();it2++){
                   if((*it2)!=0) cout<<(*it2)<<" ";
                   else{
-                      cout<<"X ";
+                      cout<<"X "; //Si asiento está ocupado
                       cont++;
                   }
                   total++;
@@ -88,6 +105,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
           cout<<"---------------------------------------------------------"<<endl;
          if(total!=cont){
           do{
+           //Si no se han comprado todas las boletas
           cout<<"Seleccione la fila: "<<endl;
           getline(cin,fila);
           }while(!Ver.IsInGeneral(fila));
@@ -96,6 +114,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
          return 0;}
        }
        else if(tipo==2){
+           //Si elige preferencial
            vector<string>preferencial;
            vector<int>asientos;
            vector<string>::iterator it;
@@ -108,7 +127,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
            cout<<(*it)<<": ";
                for(it2=asientos.begin();it2!=asientos.end();it2++){
                    if((*it2)!=0)cout<<(*it2)<<" " ;
-                   else {cout<<"X ";
+                   else {cout<<"X "; //Si asiento está ocupado
                    cont++;
                    }
                    total++;
@@ -118,6 +137,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
          }
             cout<<"---------------------------------------------------------"<<endl;
             if(cont!=total){
+                //Si no todos los asientos están ocupados
                do{
                cout<<"Seleccione la fila: "<<endl;
                getline(cin,fila);
@@ -130,6 +150,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
        }
 
        else{
+           //Si elige vibrosound
            vector<string>vibro;
            vector<int>asientos;
            vector<string>::iterator it;
@@ -144,7 +165,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
                for(it2=asientos.begin();it2!=asientos.end();it2++){
                    if((*it2)!=0) cout<<(*it2)<<" ";
                    else{
-                       cout<<"X ";
+                       cout<<"X "; //Si asiento está ocupado
                        cont++;
                    }
                    total++;
@@ -153,6 +174,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
            }
             cout<<"---------------------------------------------------------"<<endl;
            if(cont!=total){
+               //Si no todos los asientos están ocupados
                do{
                cout<<"Seleccione la fila: "<<endl;
                getline(cin,fila);
@@ -161,6 +183,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
            else{cout<<"Lo sentimos, por el momento no hay asientos disponibles"<<endl; return 0;}
        }
        if(cont!=total){
+           //Si no están ocupados todos los asientos
            do{
                do{
                cout<<"Seleccione el asiento: "<<endl;
@@ -169,6 +192,7 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
                }while(asiento>20 || asiento<0);
            }while(!Ver.Is_Available(fila,asiento));
            (*it).ComprarAsiento(fila,asiento);
+           //Guardar datos de asientos y películas
            GuardarAsientos(Peliculas);
            GuardarPeliculas(Peliculas);
        }
@@ -181,25 +205,31 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
 }
 
 void ComprarAsiento(){
+    /*
+     Función que implementa las funcionalidades de usuario y administrador de comprar asientos disponibles.
+    */
     string ID="",fila="";
     int tipo=0, asiento=0;
     int pago=0;
     int cont=0;
     string fecha="", fechaActual="";
-    fechaActual=ObtenerFechaActual();
+    fechaActual=ObtenerFechaActual(); //Obteniendo fecha actual para reporte de ventas
     int AGen=0,VenGen=0,APref=0,VenPref=0,AVibro=0,VenVibro=0;
-    LeerVentas(fecha,AGen,VenGen,APref,VenPref,AVibro,VenVibro);
-    if(fechaActual!=fecha){AGen=0;VenGen=0;APref=0;VenPref=0;AVibro=0;VenVibro=0;}
+    LeerVentas(fecha,AGen,VenGen,APref,VenPref,AVibro,VenVibro); //Leyendo datos de ventas
+    if(fechaActual!=fecha){AGen=0;VenGen=0;APref=0;VenPref=0;AVibro=0;VenVibro=0;} //Si se ha cambiado de día
     list<Pelicula> Peliculas;
-    ObtenerDatosPeliculas(Peliculas);
-    ID=DesplegarFunciones(Peliculas);
+    ObtenerDatosPeliculas(Peliculas); //Obteniendo películas
+    ID=DesplegarFunciones(Peliculas); //Imprimiendo funciones
     if(Peliculas.size()>0){
+        //Si hay funciones
         tipo=TipoAsiento();
         int r=AsientosDisponibles(ID,tipo,fila,asiento,Peliculas);
         if(r){
+            //Si el tipo elegido tiene asientos disponibles
         if(tipo==1){
                cout<<endl<<"Total: $8500"<<endl;
                do{
+                   //Realizando pago y mostrando devuelta
                    if(cont>0) cout<<"Pago no valido."<<endl;
                    cout<<"Ingrese su pago: "<<endl;
                    cin>>pago;
@@ -213,6 +243,7 @@ void ComprarAsiento(){
             else if(tipo==2){
                 cout<<endl<<"Total: $9500"<<endl;
                 do{
+                    //Realizando pago preferencial y mostrando devuelta
                     if(cont>0) cout<<"Pago no valido."<<endl;
                     cout<<"Ingrese su pago: "<<endl;
                     cin>>pago;
@@ -224,6 +255,7 @@ void ComprarAsiento(){
                 VenPref+=9500;
             }
             else{
+                //Realizando pago vibrosound y mostrando devuelta
                 cout<<endl<<"Total: $10500"<<endl;
                 do{
                     if(cont>0) cout<<"Pago no valido."<<endl;
@@ -237,7 +269,7 @@ void ComprarAsiento(){
                 VenVibro+=10500;
 
             }
-            GuardarVentas(AGen,VenGen,APref,VenPref,AVibro,VenVibro);
+            GuardarVentas(AGen,VenGen,APref,VenPref,AVibro,VenVibro); //Actualizando ventas.
         }
     }
 }
