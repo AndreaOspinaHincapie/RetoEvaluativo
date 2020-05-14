@@ -74,6 +74,11 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
           }
           cout<<endl;
       }
+      cout<<"---------------------------------------------------------"<<endl;
+      do{
+      cout<<"Seleccione la fila: "<<endl;
+      getline(cin,fila);
+      }while(!Ver.IsInGeneral(fila));
    }
    else if(tipo==2){
        vector<string>preferencial;
@@ -83,14 +88,21 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
        preferencial=Ver.getPreferencial();
        cout<<"------------------------Pantalla-------------------------"<<endl;
        cout<<"------------------------General--------------------------"<<endl;
-           asientos=Ver.getAsientos().at((*it));
-           cout<<(*it)<<": ";
+       for(it=preferencial.begin();it!=preferencial.end();it++){
+       asientos=Ver.getAsientos().at((*it));
+       cout<<(*it)<<": ";
            for(it2=asientos.begin();it2!=asientos.end();it2++){
                if((*it2)!=0) cout<<(*it2)<<" ";
                else cout<<"X ";
            }
            cout<<endl;
        }
+        cout<<"---------------------------------------------------------"<<endl;
+       do{
+       cout<<"Seleccione la fila: "<<endl;
+       getline(cin,fila);
+       }while(!Ver.IsInPreferencial(fila));
+   }
 
    else{
        vector<string>vibro;
@@ -102,7 +114,7 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
        cout<<"------------------------General--------------------------"<<endl;
        cout<<"----------------------Preferencial-----------------------"<<endl;
        for(it=vibro.begin();it!=vibro.end();it++){
-           //asientos=Ver.getAsientos().at((*it));
+           asientos=Ver.getAsientos().at((*it));
            cout<<(*it)<<": ";
            for(it2=asientos.begin();it2!=asientos.end();it2++){
                if((*it2)!=0) cout<<(*it2)<<" ";
@@ -110,12 +122,14 @@ void AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<P
            }
            cout<<endl;
        }
+        cout<<"---------------------------------------------------------"<<endl;
+       do{
+       cout<<"Seleccione la fila: "<<endl;
+       getline(cin,fila);
+       }while(!Ver.IsInVibro(fila));
    }
-   cout<<"---------------------------------------------------------"<<endl;
-   do{
-   cout<<"Seleccione la fila: "<<endl;
-   getline(cin,fila);
-   }while(!Ver.IsInGeneral(fila));
+
+
    do{
        do{
        cout<<"Seleccione el asiento: "<<endl;
