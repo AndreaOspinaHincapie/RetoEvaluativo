@@ -92,7 +92,8 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
           getline(cin,fila);
           }while(!Ver.IsInGeneral(fila));
         }
-         else{cout<<"Lo sentimos,los asientos se encuentran ocupados"<<endl;}
+         else{cout<<"Lo sentimos,los asientos se encuentran ocupados"<<endl;
+         return 0;}
        }
        else if(tipo==2){
            vector<string>preferencial;
@@ -111,8 +112,9 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
                    cont++;
                    }
                    total++;
-               cout<<endl;
+
            }
+           cout<<endl;
          }
             cout<<"---------------------------------------------------------"<<endl;
             if(cont!=total){
@@ -123,9 +125,9 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
             }
             else{
                 cout<<"Lo sentimos, los asientos se encuentan ocupados"<<endl;
+                return 0;
             }
        }
-    }
 
        else{
            vector<string>vibro;
@@ -156,9 +158,8 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
                getline(cin,fila);
                }while(!Ver.IsInVibro(fila));
             }
-           else{cout<<"Lo sentimos, por el momento no hay asientos disponibles"<<endl;}
+           else{cout<<"Lo sentimos, por el momento no hay asientos disponibles"<<endl; return 0;}
        }
-
        if(cont!=total){
            do{
                do{
@@ -171,12 +172,12 @@ int AsientosDisponibles(string ID, int tipo, string &fila, int &asiento, list<Pe
            GuardarAsientos(Peliculas);
            GuardarPeliculas(Peliculas);
        }
-
+       return 1;
+    }
    else{
        cout<<"En el momento no hay funciones disponibles. "<<endl;
-       return 1;
+       return 0;
    }
-   return 0;
 }
 
 void ComprarAsiento(){
